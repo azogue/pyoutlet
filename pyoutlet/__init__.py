@@ -25,6 +25,8 @@ PULSE_LENGTH = CODES_CONF['pulse_length']
 OUTLETS = CODES_CONF['outlets']
 OUTLETS_LABELED = {_clean(v['label']): v for v in OUTLETS}
 
+__version__ = '0.0.1'
+
 
 def _get_code(outlet, operation='off'):
     if type(outlet) is int:
