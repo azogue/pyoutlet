@@ -1,0 +1,66 @@
+{% extends "layout.html" %}
+
+{% macro alert_dismiss(obj_alert) %}
+<div class="container-fluid pb-0 mb-0 pt-1">
+    <div class="alert alert-{{ obj_alert.alert_type }} alert-dismissable"
+         style="word-wrap:break-word; overflow-wrap: break-word;">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        {{ obj_alert.texto_alerta |safe }}
+    </div>
+</div>
+{% endmacro %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-flex.min.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="jumbotron-fluid bg-primary text-white pb-1 pt-1 px-2">
+    <h1 class="display-2"><i class="fa fa-plug" aria-hidden="true"></i> <strong>Outlets</strong> Control</h1>
+</div>
+<div class="container-fluid">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+        {{ alert_dismiss({'alert_type': category, 'texto_alerta': message}) }}
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    <div class="row flex-items-xs-center">
+        {% for outlet in outlets %}
+        <div class="col-xs-12 col-sm-6 col-lg-4">
+            <div class="pb-1">
+                <h2 class="text-xs-center mb-0 mt-1"><small>Switch: </small>{{ outlet['label'] }}</h2>
+                <div class="btn-toolbar button-wrapper flex-items-xs-center" role="toolbar" aria-label="Toolbar with Outlets switches">
+                    <div class="btn-group w-100" role="group" aria-label="SWITCH {{ outlet['label'] }}">
+                        <a class="btn btn-success btn-lg {% if outlets_state[loop.index0] == True %}active{% endif %}" style="width: 49.25%" role="button"
+                           href="{{ url_for('switch_outlet', operation='on', outlet_number=loop.index)}}">ON
+                        </a>
+                        <a class="btn btn-danger btn-lg {% if outlets_state[loop.index0] == False %}active{% endif %}" style="width: 49.25%" role="button"
+                           href="{{ url_for('switch_outlet', operation='off', outlet_number=loop.index)}}">OFF
+                        </a>
+                    </div>
+                </div>
+{#                <p>state: {{ outlets_state[loop.index] }}</p>#}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<br>
+<hr>
+{#<br>#}
+{#<div class="container-fluid">#}
+{#    <div class="my-1">#}
+{#    <a data-toggle="collapse" data-target="#details"><span class="float-sm-left"><h4>OUTLETS in <code>codes_outlets.json</code> file</h4></span><br><span class="float-sm-right"><small>(press to show/hide)</small></span></a>#}
+{#    <br>#}
+{#    </div>#}
+{#    <div id="details" class="collapse">#}
+{#    {% for outlet in outlets %}#}
+{#    <p class="lead"><strong>{{ outlet['label']|safe }}</strong> --> ON CODE: {{ outlet['off']|safe }}; OFF CODE: {{ outlet['off']|safe }}</p>#}
+{#    {% endfor %}#}
+{#    </div>#}
+{#</div>#}
+{% endblock %}
