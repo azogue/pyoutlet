@@ -5,11 +5,21 @@ FROM:   http://timleland.com/wireless-power-outlets/
         https://github.com/timleland/rfoutlet
 
 """
-# import os
-import sys
-from pyoutlet import turn_on_outlet, turn_off_outlet, OUTLETS
+import argparse
+from pyoutlet import turn_on_outlet, turn_off_outlet, OUTLETS, PATH_CODES_OUTLETS
 
-# sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
+
+def _args_parser():
+    """
+    Argument parser
+
+    """
+    p = argparse.ArgumentParser(description="\033[1m\033[5m\033[32m{}\033[0m\n\n".format('PYOUTLET'),
+                                formatter_class=argparse.RawTextHelpFormatter)
+    p.add_argument('operation', nargs='?', action='store', help='Turn ON/OFF operation')
+    p.add_argument('outlet', nargs='?', action='store', help='Outlet label or #')
+    p.add_argument('-i', '--info', action='store_true', help='︎ℹ️  Show outlets CODES and labels')
+    return p
 
 
 def main():
@@ -17,24 +27,24 @@ def main():
     CLI main method
 
     """
-    help_msg = '''\033[0m\033[1m\033[34mPYOUTLET usage:\n\t* python pyoutlet ON XXXX\n\t* python pyoutlet OFF XXXX
-    where XXXX is the outlet label or the outlet index (from 1 to 5).
-    ** Outlet labels are: "{}"\033[0m
-    Try again...\n'''.format('", "'.join([v['label'] for v in OUTLETS]))
+    parser = _args_parser()
+    args = parser.parse_args()
 
-    if len(sys.argv) == 3:
-        if sys.argv[1].lower() == 'on':
-            f = turn_on_outlet
-        elif sys.argv[1].lower() == 'off':
-            f = turn_off_outlet
-        else:
-            print(help_msg)
-            sys.exit(2)
-        ok = f(sys.argv[2], verbose=True)
-        if not ok:
-            print('OPERATION ERROR !?')
-    else:
-        print(help_msg)
+    ok = False
+    if args.info:
+        print('\n** PYOUTLET JSON config in "{}"\n--> * {}\n'
+              .format(PATH_CODES_OUTLETS,
+                      '\n    * '.join(['{:20} -> ON:{}, OFF:{}'.format(d['label'], d['on'], d['off'])
+                                       for d in OUTLETS])))
+        ok = True
+    elif args.operation.lower() == 'on':
+        ok = turn_on_outlet(args.outlet, verbose=True)
+    elif args.operation.lower() == 'off':
+        ok = turn_off_outlet(args.outlet, verbose=True)
+
+    if not ok:
+        print('OPERATION ERROR !?\n')
+        parser.print_help()
 
 
 if __name__ == '__main__':
