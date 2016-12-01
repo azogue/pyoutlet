@@ -5,17 +5,18 @@ FROM:   http://timleland.com/wireless-power-outlets/
         https://github.com/timleland/rfoutlet
 
 """
+# import os
+import sys
+from pyoutlet import turn_on_outlet, turn_off_outlet, OUTLETS
 
-if __name__ == '__main__':
-    import os
-    import sys
+# sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 
-    # this_path =
-    # os.chdir(this_path)
-    sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 
-    from pyoutlet import turn_on_outlet, turn_off_outlet, OUTLETS
+def main():
+    """
+    CLI main method
 
+    """
     help_msg = '''\033[0m\033[1m\033[34mPYOUTLET usage:\n\t* python pyoutlet ON XXXX\n\t* python pyoutlet OFF XXXX
     where XXXX is the outlet label or the outlet index (from 1 to 5).
     ** Outlet labels are: "{}"\033[0m
@@ -35,3 +36,6 @@ if __name__ == '__main__':
     else:
         print(help_msg)
 
+
+if __name__ == '__main__':
+    main()

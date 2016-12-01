@@ -108,7 +108,15 @@ def switch_outlet(operation, outlet_number):
 #############################
 # RUN MANUAL SERVER
 #############################
-if __name__ == "__main__":
+def main_runweb():
+    """
+    Flask webserver
+
+    """
     if VERBOSE:
         print('EJECUTANDO FLASK WSGI A MANO en P:{}!'.format(FLASK_WEBSERVER_PORT))
     app.run(host="0.0.0.0", port=FLASK_WEBSERVER_PORT, processes=1, threaded=False, debug=DEBUG)
+
+
+if __name__ == "__main__":
+    main_runweb()
