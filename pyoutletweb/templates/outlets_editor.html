@@ -2,7 +2,6 @@
 {% from "macros.html" import alert_dismiss with context %}
 
 {% block styles %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-flex.min.css') }}">
 <style type="text/css">
 .roundbox {
     border-width: 3px;
@@ -51,7 +50,7 @@
 {% endblock %}
 
 {% block content %}
-<div class="jumbotron-fluid bg-primary text-white pb-1 pt-1 px-2">
+<div id="encabezado" class="jumbotron-fluid bg-primary text-white pb-1 pt-1 px-2">
     <div style="display: flex; align-items: center; justify-content: space-between;">
         <span class="float-xs-left"><h1 class="display-4"><i class="fa fa-cogs" aria-hidden="true"></i> <strong>Outlet</strong> config</h1></span>
         <br class="hidden-sm-up">

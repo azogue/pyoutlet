@@ -1,12 +1,8 @@
 {% extends "layout.html" %}
 {% from "macros.html" import alert_dismiss with context %}
 
-{% block styles %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-flex.min.css') }}">
-{% endblock %}
-
 {% block content %}
-<div class="jumbotron-fluid bg-primary text-white pb-1 pt-1 px-2">
+<div id="encabezado" class="jumbotron-fluid bg-primary text-white pb-1 pt-1 px-2">
     <div style="display: flex; align-items: center; justify-content: space-between;">
         <span class="float-xs-left"><h1 class="display-4"><i class="fa fa-plug" aria-hidden="true"></i> <strong>Outlets</strong> Control</h1></span>
         <span class="float-xs-right flex-xs-bottom">

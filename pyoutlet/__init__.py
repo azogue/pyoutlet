@@ -14,7 +14,7 @@ from subprocess import check_output, CalledProcessError
 import re
 
 
-__version__ = '0.0.6'
+__version__ = '0.0.7'
 
 basedir = os.path.dirname(os.path.abspath(__file__))
 PATH_CODES_OUTLETS = os.path.join(basedir, 'codes_outlets.json')

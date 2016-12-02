@@ -3,31 +3,56 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="PyOutlets">
     <meta name="application-name" content="PyOutlets">
     <meta name="author" content="Eugenio Panadero" />
     <title>PyOutlets WebControl</title>
-{#    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css" integrity="sha384-AysaV+vQoT3kOAXZkl02PThvDr8HYKPZhNT5h/CXfBThSRXQ6jW5DO2ekP5ViFdi" crossorigin="anonymous">#}
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-flex.min.css') }}">
     {% block styles %}
     {% endblock %}
 </head>
 <body>
     <header>
     {% block header %}
-{#        {{ navigation_bar() }}#}
     {% endblock %}
     </header>
     {% block content %}
     {% endblock %}
     <!-- jQuery first, then Tether, then Bootstrap JS. -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" integrity="sha384-3ceskX3iaEnIogmQchP8opvBy3Mi7Ce34nWjpBIwVTHfGYWQS9jwHDVRnpKKHJg7" crossorigin="anonymous"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.3.7/js/tether.min.js" integrity="sha384-XTs3FgkjiBgo8qjEjBk0tGmf3wPrWtA6coPfQDfFEY8AnYJwjalXCiosYRBIBZX8" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/js/bootstrap.min.js" integrity="sha384-BLiI7JTZm+JWlgKa0M0kGRpJbF2J8q+qreVrKBC47e3K6BW78kGLrCkeRX6I9RoK" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        var a=document.getElementsByTagName("a");
+        for(var i=0;i<a.length;i++)
+        {
+           a[i].onclick=function() {
+               window.location=this.getAttribute("href");
+               return false;
+           }
+        }
+    </script>
+    <script type="text/javascript">
+        function switch_padding_navbar_standalone_mode() {
+            var user_ag = "{{ request.user_agent }}";
+            var is_ipad = user_ag.indexOf('iPad') > -1;
+            if (window.navigator.standalone) {
+                if ((window.orientation == 0) || is_ipad) {
+                    $("#encabezado").addClass("pt-2");
+                }
+                else {
+                    $("#encabezado").removeClass("pt-2");
+                }
+            }
+        }
+        switch_padding_navbar_standalone_mode();
+        $(window).on("orientationchange",function(){
+            switch_padding_navbar_standalone_mode();
+        });
+    </script>
     {% block scripts %}
     {% endblock %}
 </body>
