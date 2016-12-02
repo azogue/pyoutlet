@@ -56,3 +56,27 @@ It has a simple **CLI** utility and a minimal **flask webapp** with ON/OFF butto
 			}
 		  ]
 	  }
+- Some screenshots:
+
+	<table>
+	  <td colspan="2">
+		Outlets Control page
+	  </td>
+	  <tr>
+		<td>![Control Page](https://raw.githubusercontent.com/azogue/pyoutlet/master/docs/control_page.png)</td>
+		<td>![Control Page](https://raw.githubusercontent.com/azogue/pyoutlet/master/docs/control_page_xs.png)</td>
+	  </tr>
+	</table>
+	<table>
+	  <td colspan="2">
+		Outlets Configuration editor
+	  </td>
+	  <tr>
+		<td>![Config Editor - Edit JSON config](https://raw.githubusercontent.com/azogue/pyoutlet/master/docs/edit_page_manual_editor.png)</td>
+		<td>![Config Editor - View JSON config](https://raw.githubusercontent.com/azogue/pyoutlet/master/docs/edit_page_view.png)</td>
+	  </tr>
+	  <tr>
+		<td>![Config Editor - Upload JSON config](https://raw.githubusercontent.com/azogue/pyoutlet/master/docs/edit_page_upload.png)</td>
+		<td>![Config Editor - Homebridge config](https://raw.githubusercontent.com/azogue/pyoutlet/master/docs/edit_page_homebridge_conf.png)</td>
+	  </tr>
+	</table>
