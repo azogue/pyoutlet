@@ -42,7 +42,7 @@ setup(
     entry_points={
         'console_scripts': [
             'switch = pyoutlet.__main__:main',
-            'pyoutletweb = pyoutletweb.__init__:main_runweb'
+            'pyoutletweb = pyoutletweb.__main__:main_runweb'
         ]
     }
 )

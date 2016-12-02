@@ -7,7 +7,7 @@ Python CLI & Web switcher for Etekcity power outlets using 433MHz RF
 Python wrapper around rfoutlet (from https://timleland.com/wireless-power-outlets/)
 to control **Etekcity power outlets from a Raspberry Pi** using a 433MHz RF emitter module.
 
-It has a simple **CLI** utility and a minimal **flask webapp** with ON/OFF buttons.
+It has a simple **CLI** utility and a minimal **flask webapp** with ON/OFF buttons and a config editor.
 
 - Install is as simple as `pip install pyoutlet`
 

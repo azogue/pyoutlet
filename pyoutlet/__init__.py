@@ -14,7 +14,7 @@ from subprocess import check_output, CalledProcessError
 import re
 
 
-__version__ = '0.0.5'
+__version__ = '0.0.6'
 
 basedir = os.path.dirname(os.path.abspath(__file__))
 PATH_CODES_OUTLETS = os.path.join(basedir, 'codes_outlets.json')
@@ -62,7 +62,8 @@ class Switcher(object):
         self._pulse_length = str(self._codes_conf['pulse_length'])
         self._outlets = self._codes_conf['outlets']
         self._outlets_labeled = {self._clean(v['label']): (i, v) for i, v in enumerate(self._outlets)}
-        self._outlets_state = [None] * len(self._outlets)
+        if self._outlets_state is None:
+            self._outlets_state = [None] * len(self._outlets)
 
     @property
     def config_text(self):
@@ -165,7 +166,7 @@ class Switcher(object):
             code = self._outlets[outlet - 1][operation]
         elif self._clean(outlet) in self._outlets_labeled.keys():
             code = self._outlets_labeled[self._clean(outlet)][1][operation]
-            ind_outlet = self._outlets_labeled[self._clean(outlet)][0][operation]
+            ind_outlet = self._outlets_labeled[self._clean(outlet)][0]
         else:
             try:
                 ind_outlet = int(outlet) - 1
