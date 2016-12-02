@@ -1,0 +1,12 @@
+{% macro alert_dismiss(obj_alert) %}
+<div class="container-fluid pb-0 mb-0 pt-1">
+    <div class="alert alert-{{ obj_alert.alert_type }} alert-dismissable"
+         style="word-wrap:break-word; overflow-wrap: break-word;">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        {{ obj_alert.texto_alerta |safe }}
+    </div>
+</div>
+{% endmacro %}
+

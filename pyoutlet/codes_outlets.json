@@ -1,30 +1,30 @@
 {
-  "pulse_length": 185,
-  "outlets": [
-    {
-      "on": 4527411,
-      "off": 4527420,
-      "label": "1"
-    },
-    {
-      "on": 4527555,
-      "off": 4527564,
-      "label": "2"
-    },
-    {
-      "on": 4527875,
-      "off": 4527884,
-      "label": "3"
-    },
-    {
-      "on": 4529411,
-      "off": 4529420,
-      "label": "Sofá"
-    },
-    {
-      "on": 4535555,
-      "off": 4535564,
-      "label": "Calefactor"
-    }
-  ]
+    "pulse_length": 185,
+    "outlets": [
+        {
+            "label": "Cocina",
+            "off": 4527420,
+            "on": 4527411
+        },
+        {
+            "label": "Caldera",
+            "off": 4527564,
+            "on": 4527555
+        },
+        {
+            "label": "Tele",
+            "off": 4527884,
+            "on": 4527875
+        },
+        {
+            "label": "Sofá",
+            "off": 4529420,
+            "on": 4529411
+        },
+        {
+            "label": "Calefactor",
+            "off": 4535564,
+            "on": 4535555
+        }
+    ]
 }

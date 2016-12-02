@@ -1,16 +1,5 @@
 {% extends "layout.html" %}
-
-{% macro alert_dismiss(obj_alert) %}
-<div class="container-fluid pb-0 mb-0 pt-1">
-    <div class="alert alert-{{ obj_alert.alert_type }} alert-dismissable"
-         style="word-wrap:break-word; overflow-wrap: break-word;">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-        {{ obj_alert.texto_alerta |safe }}
-    </div>
-</div>
-{% endmacro %}
+{% from "macros.html" import alert_dismiss with context %}
 
 {% block styles %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-flex.min.css') }}">
@@ -18,7 +7,14 @@
 
 {% block content %}
 <div class="jumbotron-fluid bg-primary text-white pb-1 pt-1 px-2">
-    <h1 class="display-2"><i class="fa fa-plug" aria-hidden="true"></i> <strong>Outlets</strong> Control</h1>
+    <div style="display: flex; align-items: center; justify-content: space-between;">
+        <span class="float-xs-left"><h1 class="display-4"><i class="fa fa-plug" aria-hidden="true"></i> <strong>Outlets</strong> Control</h1></span>
+        <span class="float-xs-right flex-xs-bottom">
+            <a class="btn btn-warning btn-sm" href="{{ url_for('config_editor') }}" role="button">
+                <i class="fa fa-cogs" aria-hidden="true"></i> Config
+            </a>
+        </span>
+    </div>
 </div>
 <div class="container-fluid">
     {% with messages = get_flashed_messages(with_categories=true) %}

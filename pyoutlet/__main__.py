@@ -6,7 +6,7 @@ FROM:   http://timleland.com/wireless-power-outlets/
 
 """
 import argparse
-from pyoutlet import turn_on_outlet, turn_off_outlet, OUTLETS, PATH_CODES_OUTLETS
+from pyoutlet import Switcher
 
 
 def _args_parser():
@@ -30,17 +30,16 @@ def main():
     parser = _args_parser()
     args = parser.parse_args()
 
+    switch = Switcher()
     ok = False
     if args.info:
-        print('\n** PYOUTLET JSON config in "{}"\n--> * {}\n'
-              .format(PATH_CODES_OUTLETS,
-                      '\n    * '.join(['{:20} -> ON:{}, OFF:{}'.format(d['label'], d['on'], d['off'])
-                                       for d in OUTLETS])))
+        print(switch)
+        print('JSON configuration for "homebridge-rcswitch-gpiomem":\n{}\n'.format(switch.homebridge_accessories))
         ok = True
     elif args.operation.lower() == 'on':
-        ok = turn_on_outlet(args.outlet, verbose=True)
+        ok = switch.turn_on_outlet(args.outlet, verbose=True)
     elif args.operation.lower() == 'off':
-        ok = turn_off_outlet(args.outlet, verbose=True)
+        ok = switch.turn_off_outlet(args.outlet, verbose=True)
 
     if not ok:
         print('OPERATION ERROR !?\n')

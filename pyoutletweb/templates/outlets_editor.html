@@ -1,0 +1,310 @@
+{% extends "layout.html" %}
+{% from "macros.html" import alert_dismiss with context %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-flex.min.css') }}">
+<style type="text/css">
+.roundbox {
+    border-width: 3px;
+    border-radius: 18px;
+    padding: 20px;
+    border-style: solid;
+}
+.roundbox-edition{
+    background-color: rgba(20, 140, 229, 0.18);
+    border-color: #1477d5;
+}
+.roundbox-viewing{
+    background-color: #fcf8e4;
+    border-color: #eeac57;
+}
+.roundbox-info{
+    background-color: rgba(161, 6, 253, 0.3);
+    border-color: #9606ee;
+}
+.roundbox-upload{
+    background-color: rgba(234, 91, 89, 0.27);
+    border-color: #d75452;
+}
+.inputfile {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+.inputfile + label {
+    color: #ffffff;
+    background-color: #1477d5;
+    cursor: pointer; /* "hand" cursor */
+    display: inline-block;
+}
+.inputfile:focus + label,
+.inputfile.has-focus + label,
+.inputfile + label:hover {
+	outline: 1px dotted #000;
+	outline: -webkit-focus-ring-color auto 5px;
+    background-color: #123972;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="jumbotron-fluid bg-primary text-white pb-1 pt-1 px-2">
+    <div style="display: flex; align-items: center; justify-content: space-between;">
+        <span class="float-xs-left"><h1 class="display-4"><i class="fa fa-cogs" aria-hidden="true"></i> <strong>Outlet</strong> config</h1></span>
+        <br class="hidden-sm-up">
+        <span class="float-xs-right flex-xs-top">
+            <div>
+                <a class="btn btn-success btn-sm" href="{{ url_for('index') }}" role="button">
+                    <i class="fa fa-plug" aria-hidden="true"></i> Control
+                </a>
+                <a class="btn btn-warning btn-sm my-1"
+                   href="{{ url_for('download_config', as_attachment=True) }}"
+                   download="{{ url_for('download_config', as_attachment=True) }}" role="button">
+                    <i class="fa fa-download" aria-hidden="true"></i> Download
+                </a>
+            </div>
+        </span>
+    </div>
+</div>
+<div class="container-fluid">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+        {{ alert_dismiss({'alert_type': category, 'texto_alerta': message}) }}
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    <div class="container-fluid">
+        <div class="row mx-0 mt-1">
+            <div class="col-12 mx-0">
+                <ul class="nav nav-tabs" id="EditorTabView" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-toggle="tab" href="#edit_view" role="tab" aria-controls="edit_view">
+                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i> <strong>Edit</strong>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#show_view" role="tab" aria-controls="show_view">
+                            <i class="fa fa-eye" aria-hidden="true"></i> <strong>View</strong>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#upload_view" role="tab" aria-controls="upload_view">
+                            <i class="fa fa-upload" aria-hidden="true"></i> <strong>Upload</strong>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#info_view" role="tab" aria-controls="info_view">
+                            <i class="fa fa-info-circle" aria-hidden="true"></i> <strong>Homekit</strong>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="tab-content">
+        {% if dict_config_content %}
+        <div class="tab-pane fade in active" id="edit_view" role="tabpanel">
+            <div class="container-fluid">
+                <form style="display: flex; flex-wrap: wrap; align-content: center; justify-content: space-around;" method="post" autocomplete="on">
+                <div class="row mx-auto" style="width: 100%;">
+                {% for section, config_opts in dict_config_content.items() %}
+                    {% if section != section_genconf %}
+                    <div class="col-xs-12 col-sm-6 col-md-4">
+                        <div id="section_{{ section }}" class="form-group roundbox roundbox-edition">
+                            <h2><span class="tag tag-pill tag-primary">{{ section }}</span><button type="button" class="btn btn-danger btn-sm float-sm-right hidden-sm-down" data-toggle="modal" data-target="#confimationModalSaveFile"><i class="fa fa-pencil-square" aria-hidden="true"></i> Save</button></h2>
+                            {% for var_name, (value, var_type) in config_opts.items() %}
+                                <div class="form-group input-group input-group-sm" id="group_{{ section }}_{{ var_name }}">
+                                    {% if var_type == 'str' %}
+                                        <label class="col-sm-5 form-control-label" for="var_{{ section }}_{{ var_name }}"><strong>{{ var_name }}:</strong></label>
+                                        <div class=" col-sm-7">
+                                            <input type="text" class="form-control form-control-sm"
+                                                   name="{{ var_name }}" id="var_{{ section }}_{{ var_name }}" value="{{ value }}">
+                                        </div>
+                                    {% else %}
+                                        <label class="col-sm-6 form-control-label" for="var_{{ section }}_{{ var_name }}"><strong>{{ var_name }}:</strong></label>
+                                        <div class=" col-sm-6">
+                                            <input type="number" class="form-control form-control-sm" step="1" id="var_{{ section }}_{{ var_name }}"
+                                                   name="{{ var_name }}" value="{{ value }}">
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                            <div class="form-group input-group input-group-sm mb-0">
+                                    <button type="button" class="btn btn-danger btn-sm btn-block hidden-md-up" data-toggle="modal" data-target="#confimationModalSaveFile"><i class="fa fa-pencil-square" aria-hidden="true"></i> Save</button>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+                </div>
+                <br>
+                <hr>
+                <br>
+                <div class="row mx-auto" style="width: 100%;">
+                {% set section = section_genconf %}
+                {% set config_opts = dict_config_content[section] %}
+                    <div class="col-xs-12">
+                        <div id="section_{{ section }}" class="form-group roundbox roundbox-edition">
+                            <h2><span class="tag tag-pill tag-primary">{{ section }}</span><button type="button" class="btn btn-danger btn-sm float-sm-right hidden-sm-down" data-toggle="modal" data-target="#confimationModalSaveFile"><i class="fa fa-pencil-square" aria-hidden="true"></i> Save</button></h2>
+                            {% for var_name, (value, var_type) in config_opts.items() %}
+                                <div class="form-group input-group input-group-sm" id="group_{{ section }}_{{ var_name }}">
+                                    {% if var_type == 'str' %}
+                                        <label class="col-sm-5 form-control-label" for="var_{{ section }}_{{ var_name }}"><strong>{{ var_name }}:</strong></label>
+                                        <div class=" col-sm-7">
+                                            <input type="text" class="form-control form-control-sm"
+                                                   name="{{ var_name }}" id="var_{{ section }}_{{ var_name }}" value="{{ value }}">
+                                        </div>
+                                    {% else %}
+                                        <label class="col-sm-7 form-control-label" for="var_{{ section }}_{{ var_name }}"><strong>{{ var_name }}:</strong></label>
+                                        <div class=" col-sm-5">
+                                            <input type="number" class="form-control form-control-sm" step="1" id="var_{{ section }}_{{ var_name }}"
+                                                   name="{{ var_name }}" value="{{ value }}">
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                            <div class="form-group input-group input-group-sm mb-0">
+                                    <button type="button" class="btn btn-danger btn-sm btn-block hidden-md-up" data-toggle="modal" data-target="#confimationModalSaveFile"><i class="fa fa-pencil-square" aria-hidden="true"></i> Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal -->
+                <div id="confimationModalSaveFile" class="modal fade" role="dialog">
+                  <div class="modal-dialog">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Confirm changes?</h4>
+                      </div>
+                      <div class="modal-body">
+                        <p>Click "Confirm over-write" to save changes in configuration file, over-writting the config file {% if abspath %}(Abspath: <strong style="word-wrap:break-word; overflow-wrap: break-word;">{{ abspath|safe }}</strong>){% endif %}
+                        </p>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="submit" class="btn btn-danger btn-sm float-xs-left"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Confirm over-write</button>
+                        <button type="button" class="btn btn-primary btn-sm float-xs-right" data-dismiss="modal">Cancel</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                </form>
+            </div>
+        </div>
+        {% else %}
+        <div class="tab-pane fade in active" id="edit_view" role="tabpanel">
+            <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            CONFIG File not found!!
+            </div>
+        </div>
+        {% endif %}
+        <div class="tab-pane fade" id="show_view" role="tabpanel">
+            <div class="container">
+                <div class="col-xs-12 alert-warning roundbox roundbox-viewing">
+                    <br>
+                    {% if file_lines %}
+                    <pre>{{ file_lines|safe }}</pre>
+                    {% else %}
+                    <div class="alert alert-danger" role="alert">
+                        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                        <span class="sr-only">Error:</span>
+                        File not found!!
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="info_view" role="tabpanel">
+            <div class="container">
+                <h4><strong>Homebridge JSON</strong> config</h4>
+                <p>Outlets as accessories for the <code>homebridge-rcswitch-gpiomem</code> plugin</p>
+                <br>
+                <div class="col-xs-12 roundbox roundbox-info">
+                    <pre>{{ homebridge_info|safe }}</pre>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="upload_view" role="tabpanel">
+            <div class="container">
+                <div class="col-xs-12 alert-danger roundbox roundbox-upload">
+                    <h2>Upload file for replacement:</h2>
+                    <br>
+                    <form class="form-horizontal col-xs-12 mx-auto" id="form_uploadfile"
+                          method="POST" action="{{ url_for('uploadfile') }}" enctype="multipart/form-data">
+                        <input type="file" name="file" id="file_input" class="inputfile" accept="application/textedit" draggable="true" required>
+                        <label for="file_input" class="btn btn-sm my-1 mr-2"><i class="fa fa-upload" aria-hidden="true"></i> <span>Choose a file...</span></label>
+                        <button type="button" id="submit_upload_button" class="btn btn-danger btn-sm hidden-xs-up" data-toggle="modal" data-target="#confimationModalUploadFile">
+                            <i class="fa fa-pencil-square" aria-hidden="true"></i> Confirm upload and over-write
+                        </button>
+                        <h6 id="selected_file_props" class="lead hidden-xs-up mt-1"></h6>
+                    </form>
+                </div>
+                <!-- Modal -->
+                <div id="confimationModalUploadFile" class="modal fade" role="dialog">
+                  <div class="modal-dialog">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Confirm Upload?</h4>
+                      </div>
+                      <div class="modal-body">
+                        <p>Click "Confirm replacement" to upload the selected file in order to replace the current JSON file at: <strong style="word-wrap:break-word; overflow-wrap: break-word;">{{ abspath|safe }}</strong>)</p>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="submit" form="form_uploadfile" class="btn btn-danger btn-sm float-xs-left"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Confirm replacement</button>
+                        <button type="button" class="btn btn-primary btn-sm float-xs-right" data-dismiss="modal">Cancel</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts%}
+<script>
+    $(document).ready(function() {
+        $("#form_uploadfile").submit(function(e) {
+            var getInputVal = $('#file_input').val();
+            if (getInputVal.length == 0 || getInputVal.length == null) {
+                alert('ERROR: NO FILE TO UPLOAD');
+                event.preventDefault();
+            }
+        });
+        var $input = $("#file_input");
+        var $label = $input.next('label');
+        var labelVal = $label.html();
+        $input.on('change', function( e ) {
+            if (e.target.files.length > 0) {
+                var fileName = e.target.value.split('\\').pop();
+                $label.find('span').html(fileName);
+                var file = e.target.files[0];
+                var mtime = new Date(file.lastModified);
+                var info_file = 'File size: <strong>' + String(Math.ceil(file.size / 1024)) + ' KB</strong>; modified: <strong>' + mtime.toLocaleString() + '</strong>';
+                if (file.type.length > 0)
+                    info_file += '; type: <strong>' + file.type + '</strong>';
+                $('#selected_file_props').removeClass('hidden-xs-up').html(info_file);
+                $('#submit_upload_button').removeClass('hidden-xs-up');
+            }
+            else {
+                $('#selected_file_props').addClass('hidden-xs-up');
+                $('#submit_upload_button').addClass('hidden-xs-up');
+                console.log('CHANGE EN FILE_INPUT Y NO VALUE??');
+            }
+        });
+        // Firefox bug fix
+        $input.on( 'focus', function(){ $input.addClass( 'has-focus' ); }).on( 'blur', function(){ $input.removeClass( 'has-focus' ); });
+    });
+</script>
+{% endblock %}

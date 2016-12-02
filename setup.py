@@ -38,7 +38,7 @@ setup(
         'pyoutlet': ['switch.sh', 'codes_outlets.json'],
         'pyoutletweb': ['templates/*', 'static/css/*'],
     },
-    install_requires=['flask>=0.11'],
+    install_requires=['flask>=0.11', 'jsondiff>=1.0.0'],
     entry_points={
         'console_scripts': [
             'switch = pyoutlet.__main__:main',
